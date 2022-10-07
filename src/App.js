@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { Box, TextField, Typography, Button } from "@mui/material";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import HowToRegOutlinedIcon from "@mui/icons-material/HowToRegOutlined";
+import { app} from "./firebaseConfig";
+import { getAuth,GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 export default function Auth() {
+  let auth = getAuth();
+  let googleProvider =new GoogleAuthProvider();
   const [isSignUp, setIsSignUp] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     email: "",
     password: " ",
   });
-  console.log(isSignUp);
+  // console.log(isSignUp);
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
@@ -19,6 +23,13 @@ export default function Auth() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(inputs);
+    signInWithPopup (auth, googleProvider)
+    .then((response)=>{
+         console.log(response.user);
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
   };
   const resetState = (e) => {
     setIsSignUp(!isSignUp);
